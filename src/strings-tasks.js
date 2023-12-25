@@ -4,6 +4,7 @@
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String   *
  *                                                                                           *
  ******************************************************************************************* */
+
 /**
  * Returns the length of the given string.
  *
@@ -59,7 +60,7 @@ function isString(value) {
  */
 function concatenateStrings(value1, value2) {
   /* throw new Error('Not implemented'); */
-  return value1 + value2;
+  return value1.concat(value2);
 }
 
 /**
@@ -77,8 +78,7 @@ function getFirstChar(value) {
   /* throw new Error('Not implemented'); */
   let res;
   if (value.length !== 0) {
-    // eslint-disable-next-line prefer-destructuring
-    res = value[0];
+    res = value.charAt(0);
   } else {
     res = value;
   }
@@ -165,8 +165,12 @@ function repeatString(str, times) {
  */
 function removeFirstOccurrences(str, value) {
   /* throw new Error('Not implemented'); */
-
-  return str.replace(value, '');
+  const firstIndexPos = str.indexOf(value);
+  if (firstIndexPos === -1) {
+    return str;
+  }
+  const lastIndexPos = firstIndexPos + value.length;
+  return str.slice(0, firstIndexPos) + str.slice(lastIndexPos);
 }
 
 /**
@@ -208,9 +212,15 @@ function removeLastOccurrences(str, value) {
  */
 function sumOfCodes(str) {
   /* throw new Error('Not implemented'); */
-  return str.split('').reduce((acc, char) => {
-    return acc + char.charCodeAt(0);
-  }, 0);
+  let res;
+  if (!str) {
+    res = 0;
+  } else {
+    res = str.split('').reduce((acc, char) => {
+      return acc + char.charCodeAt(0);
+    }, 0);
+  }
+  return res;
 }
 
 /**
@@ -260,16 +270,9 @@ function endsWith(str, substr) {
  */
 function formatTime(minutes, seconds) {
   /* throw new Error('Not implemented'); */
-  let result = '';
-
-  result += minutes.toString().length < 2 ? `0${minutes}` : minutes;
-  result += ':';
-  result +=
-    seconds.toString().length < 2
-      ? (result += `0${seconds}`)
-      : (result += seconds);
-
-  return result;
+  return `${minutes.toString().padStart(2, '0')}:${seconds
+    .toString()
+    .padStart(2, '0')}`;
 }
 
 /**
@@ -559,30 +562,32 @@ function encodeToRot13(str) {
     lowercase: [97, 122],
   };
   const resArray = [];
-  /*
-  let flag = '';
-*/
   str.split('').forEach((char) => {
     const code = char.charCodeAt(0);
-    const newCode = code + 13;
-    if (code <= borders.capitals[1]) {
-      /*
-      flag = 'capital';
-*/
-      if (newCode > borders.capitals[1]) {
-        const res = borders.capitals[0] + newCode - borders.capitals[1] - 1;
+    let newCode = 0;
+    if (
+      (code >= borders.capitals[0] && code <= borders.capitals[1]) ||
+      (code >= borders.lowercase[0] && code <= borders.lowercase[1])
+    ) {
+      newCode = code + 13;
+      if (code <= borders.capitals[1]) {
+        if (newCode > borders.capitals[1]) {
+          const res = borders.capitals[0] + newCode - borders.capitals[1] - 1;
+          resArray.push(String.fromCharCode(res));
+        } else {
+          resArray.push(String.fromCharCode(newCode));
+        }
+      } else if (newCode > borders.lowercase[1]) {
+        const res = borders.lowercase[0] + newCode - borders.lowercase[1] - 1;
         resArray.push(String.fromCharCode(res));
       } else {
         resArray.push(String.fromCharCode(newCode));
       }
-    } else if (newCode > borders.lowercase[1]) {
-      const res = borders.lowercase[0] + newCode - borders.lowercase[1] - 1;
-      resArray.push(String.fromCharCode(res));
     } else {
-      resArray.push(String.fromCharCode(newCode));
+      newCode = char;
+      resArray.push(newCode);
     }
   });
-
   return resArray.join('');
 }
 
