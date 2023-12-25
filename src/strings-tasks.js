@@ -42,7 +42,7 @@ function getStringLength(value) {
  */
 function isString(value) {
   /* throw new Error('Not implemented'); */
-  return typeof value === 'string';
+  return typeof value === 'string' || value instanceof String;
 }
 
 /**
@@ -75,7 +75,14 @@ function concatenateStrings(value1, value2) {
  */
 function getFirstChar(value) {
   /* throw new Error('Not implemented'); */
-  return value[0];
+  let res;
+  if (value.length !== 0) {
+    // eslint-disable-next-line prefer-destructuring
+    res = value[0];
+  } else {
+    res = value;
+  }
+  return res;
 }
 
 /**
@@ -177,9 +184,14 @@ function removeFirstOccurrences(str, value) {
 function removeLastOccurrences(str, value) {
   /* throw new Error('Not implemented'); */
   const lastIndex = str.lastIndexOf(value);
-  return (
-    str.slice(0, lastIndex) + str.slice(lastIndex + value.length, str.length)
-  );
+  let res;
+  if (lastIndex !== -1) {
+    res =
+      str.slice(0, lastIndex) + str.slice(lastIndex + value.length, str.length);
+  } else {
+    res = str;
+  }
+  return res;
 }
 
 /**
@@ -350,9 +362,9 @@ function countVowels(str) {
  *   isPalindrome('apple') => false
  *   isPalindrome('No lemon, no melon') => true
  */
-function isPalindrome(str) {
-  /* throw new Error('Not implemented'); */
-  const cleanedArray = [];
+function isPalindrome(/* str */) {
+  throw new Error('Not implemented');
+  /* const cleanedArray = [];
   const regex = '[a-zA-z]';
   str.split('').forEach((char) => {
     if (char.match(regex)) cleanedArray.push(char.toLowerCase());
@@ -374,7 +386,7 @@ function isPalindrome(str) {
       total = false;
     }
   }
-  return total;
+  return total; */
 }
 
 /**
