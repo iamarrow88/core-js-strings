@@ -4,9 +4,6 @@
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String   *
  *                                                                                           *
  ******************************************************************************************* */
-
-const { min } = require('mocha/lib/reporters');
-
 /**
  * Returns the length of the given string.
  *
@@ -23,6 +20,9 @@ const { min } = require('mocha/lib/reporters');
  */
 function getStringLength(value) {
   /* throw new Error('Not implemented'); */
+  if (!value) {
+    return 0;
+  }
   return value.length;
 }
 
